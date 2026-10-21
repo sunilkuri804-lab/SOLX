@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solidus-X ($SOLX) - Future of Blockchain</title>
+    <script src="https://tailwindcss.com"></script>
+    <script src="https://cloudflare.com"></script>
+    <style>
+        body { background: linear-gradient(135deg, #020617 0%, #0f172a 100%); color: #f8fafc; font-family: sans-serif; }
+        .neon-glow { text-shadow: 0 0 10px #22c55e, 0 0 20px #22c55e; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navbar -->
+    <nav class="border-b border-slate-800 px-6 py-4 flex justify-between items-center max-w-7xl mx-auto">
+        <div class="text-2xl font-bold text-green-500 tracking-wider">SOLIDUS—X</div>
+        <button id="connectWalletBtn" class="bg-green-500 hover:bg-green-600 text-slate-950 font-bold px-6 py-2.5 rounded-lg transition duration-200">Connect Wallet</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="max-w-4xl mx-auto text-center px-6 py-20">
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight">Built for the <span class="text-green-500 neon-glow">long orbit.</span></h1>
+        <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10">Solidus-X is a community-owned token for people who think beyond the next block. A brighter economy, in motion.</p>
+        
+        <!-- Airdrop Card -->
+        <div class="bg-slate-900/60 border border-slate-800 p-8 rounded-2xl max-w-xl mx-auto shadow-2xl backdrop-blur-md">
+            <h3 class="text-2xl font-bold mb-2">🎁 Solidus-X Live Airdrop Pool</h3>
+            <p class="text-slate-400 text-sm mb-6">Total Rewards: 500,000,000 $SOLX Available</p>
+            
+            <div class="border-t border-b border-slate-800 py-4 my-4 text-left space-y-3">
+                <p class="text-sm"><span class="text-green-500 font-bold">✓ Day 1 Unlock:</span> 10% (50 Coins) instantly credited to your wallet.</p>
+                <p class="text-sm"><span class="text-green-500 font-bold">✓ 9-Month Vesting:</span> Remaining 90% unlocks automatically monthly.</p>
+            </div>
+            
+            <button id="claimAirdropBtn" class="w-full bg-green-500 hover:bg-green-600 text-slate-950 font-extrabold py-4 rounded-xl text-lg transition duration-200 shadow-lg shadow-green-500/20">ENTER THE AIRDROP ↗</button>
+            <p id="walletStatus" class="mt-4 text-sm text-slate-400"></p>
+        </div>
+    </section>
+
+    <!-- Tokenomics -->
+    <section class="max-w-5xl mx-auto px-6 py-16 border-t border-slate-900">
+        <h2 class="text-3xl font-bold text-center mb-12">📊 Tokenomics & Supply</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div class="bg-slate-900/40 p-6 rounded-xl border border-slate-850">
+                <div class="text-3xl font-black text-green-500 mb-1">5B</div>
+                <div class="text-xs uppercase tracking-wider text-slate-500">Total Supply</div>
+            </div>
+            <div class="bg-slate-900/40 p-6 rounded-xl border border-slate-850">
+                <div class="text-3xl font-black text-green-500 mb-1">03%</div>
+                <div class="text-xs uppercase tracking-wider text-slate-500">Marketing Tax</div>
+            </div>
+            <div class="bg-slate-900/40 p-6 rounded-xl border border-slate-850">
+                <div class="text-3xl font-black text-green-500 mb-1">09 mo</div>
+                <div class="text-xs uppercase tracking-wider text-slate-500">Vesting Horizon</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community & Vision -->
+    <section class="max-w-4xl mx-auto px-6 py-16 text-center border-t border-slate-900">
+        <h2 class="text-3xl font-bold mb-6">⚡ Join the Solidus-X Movement</h2>
+        <p class="text-slate-400 max-w-xl mx-auto mb-8">No venture capitalists, no secret dumps. The community owns the biggest chunk of early rewards. Complete tasks on Zealy to boost your allocation!</p>
+        <div class="flex justify-center gap-4">
+            <a href="#" class="bg-slate-800 hover:bg-slate-700 px-6 py-3 rounded-lg text-sm font-semibold transition">Official Telegram</a>
+            <a href="#" class="bg-slate-800 hover:bg-slate-700 px-6 py-3 rounded-lg text-sm font-semibold transition">Zealy Campaign</a>
+        </div>
+    </section>
+
+    <footer class="text-center py-8 text-xs text-slate-600 border-t border-slate-900">
+        © 2026 Solidus-X Ecosystem. Hardcoded permanently into the blockchain network.
+    </footer>
+
+    <!-- Wallet Connection Logic -->
+    <script>
+        const connectBtn = document.getElementById('connectWalletBtn');
+        const claimBtn = document.getElementById('claimAirdropBtn');
+        const statusText = document.getElementById('walletStatus');
+        let userAddress = null;
+
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+                    await provider.send("eth_requestAccounts", []);
+                    const signer = provider.getSigner();
+                    userAddress = await signer.getAddress();
+                    
+                    const shortAddress = userAddress.substring(0, 6) + "..." + userAddress.substring(userAddress.length - 4);
+                    connectBtn.innerText = shortAddress;
+                    statusText.innerText = "Wallet connected successfully! Ready to claim.";
+                    statusText.className = "mt-4 text-sm text-green-400";
+                } catch (error) {
+                    statusText.innerText = "Connection rejected by user.";
+                    statusText.className = "mt-4 text-sm text-red-400";
+                }
+            } else {
+                statusText.innerText = "MetaMask not detected. Please open in a crypto browser.";
+                statusText.className = "mt-4 text-sm text-yellow-400";
+            }
+        }
+
+        connectBtn.addEventListener('click', connectWallet);
+        claimBtn.addEventListener('click', () => {
+            if (!userAddress) {
+                connectWallet();
+            } else {
+                statusText.innerText = "Initiating Claim... (Waiting for Geth network integration)";
+                statusText.className = "mt-4 text-sm text-green-500 font-bold animate-pulse";
+            }
+        });
+    </script>
+</body>
+</html>
