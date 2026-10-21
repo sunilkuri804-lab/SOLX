@@ -1,0 +1,2 @@
+# SOLX
+Crypto coin
